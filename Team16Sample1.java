@@ -88,8 +88,8 @@ class MainWindow extends JFrame {
         }
         List<AttendanceRecord> attendanceList = FileIO.loadAttendance();
         attmanager.setRecords(attendanceList);
-        // Map<String, List<String>> schedules = FileIO.loadSchedule();
-        // schmanager.setScheduleMap(schedules);
+        Map<String, List<String>> schedules = FileIO.loadSchedule();
+        schmanager.setScheduleMap(schedules);
 
 
 
@@ -156,7 +156,7 @@ class MainWindow extends JFrame {
 
 
 
-        // 임시로 addbtn(버튼) 객체에 Event Listener 등록
+        // 임시로 출석, 일정 객체에 Event Listener 등록
 		attbtn.addActionListener(e -> {
               int selectedIndex = lectureList.getSelectedIndex();
               if (selectedIndex != -1) {
@@ -176,6 +176,19 @@ class MainWindow extends JFrame {
         		JOptionPane.showMessageDialog(this, "강의를 선택하세요.");
     			}
 			});	
+		schbtn.addActionListener(e -> {
+    JDialog dialog = new JDialog(this, "일정 관리", true);  // 모달(true)
+    ScheduleManagerUI scheduleUI = new ScheduleManagerUI(lecmanager, schmanager);
+    
+    dialog.setContentPane(scheduleUI.getContentPane());  // 내부 구성 복사
+    dialog.setSize(scheduleUI.getSize());                // 크기도 복사
+    dialog.setLocationRelativeTo(this);                  // 부모 기준 가운데 정렬
+    dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+    dialog.setVisible(true);
+});
+
+
+	
 
 		addbtn.addActionListener(new AddListener(this)); // addbtn(버튼) 객체에 Event Listener 등록. 버튼에 클릭 이벤트를 등록하고, 클릭 시
 															// AddListener 클래스에서 정의한 로직이 실행되도록 함.
@@ -194,7 +207,7 @@ class MainWindow extends JFrame {
                 List<Lecture> current = LectureManager.toList(lecmanager);
                 FileIO.saveLectures(current);
                 FileIO.saveAttendance(attmanager.getRecords());
-                // FileIO.saveSchedule(schmanager.getScheduleMap());
+                FileIO.saveSchedule(schmanager.getScheduleMap());
                 System.exit(0);
             }
         });
