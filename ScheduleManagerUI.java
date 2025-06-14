@@ -1,3 +1,5 @@
+// package schedule;
+
 import com.toedter.calendar.JCalendar;
 import javax.swing.*;
 import java.awt.*;
