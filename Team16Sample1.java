@@ -54,7 +54,7 @@ class MainWindow extends JFrame {
 	JButton editbtn = null;
 	JButton deletebtn = null;
 	// JButton sortbtn = null;
-	JButton attbtn = null;
+	JButton attbtn = null;  
 	JButton membtn = null;
 	JButton schbtn = null;
 	JTextArea jta = null;
@@ -148,6 +148,8 @@ class MainWindow extends JFrame {
 		menupanel.setLayout(new GridLayout(1, 3));
 		attbtn = new JButton("출석");
 		menupanel.add(attbtn);
+		JButton attStatsBtn = new JButton("출석 통계");
+		menupanel.add(attStatsBtn);
 		membtn = new JButton("메모");
 		menupanel.add(membtn);
 		schbtn = new JButton("일정");
@@ -156,26 +158,32 @@ class MainWindow extends JFrame {
 
 
 
-        // 임시로 출석, 일정 객체에 Event Listener 등록
-		attbtn.addActionListener(e -> {
-              int selectedIndex = lectureList.getSelectedIndex();
-              if (selectedIndex != -1) {
-        		String lectureName = lecmanager.lecture[selectedIndex].getLecturename();
+			// MainWindow 안에
+		attbtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				int selectedIndex = lectureList.getSelectedIndex();
+				if (selectedIndex == -1) {
+					JOptionPane.showMessageDialog(MainWindow.this, "먼저 강의를 선택하세요.");
+					return;
+				}
+				Lecture selectedLecture = lecmanager.lecture[selectedIndex];
+				String lectureName = selectedLecture.getLecturename();
 
-        		// JDialog 생성
-        		JDialog dialog = new JDialog(this, "출석 처리", true);
-        		dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-        		dialog.setSize(300, 200);
-        		dialog.setLocationRelativeTo(this); // 메인창 기준 가운데 띄우기
+				JFrame attFrame = new JFrame("출석 관리 - " + lectureName);
+				attFrame.setSize(300, 200);
+				attFrame.setLocationRelativeTo(MainWindow.this);
 
-        		AttendancePanel panel = new AttendancePanel(lectureName, attmanager);
-        		dialog.add(panel);
+				// attmanager가 null이 아니어야 함
+				AttendancePanel attPanel = new AttendancePanel(attFrame, lectureName, attmanager);
+				attFrame.setContentPane(attPanel);
+				attFrame.setVisible(true);
+			}
+		});
 
-        		dialog.setVisible(true); }// 창 띄우기
-    		else {
-        		JOptionPane.showMessageDialog(this, "강의를 선택하세요.");
-    			}
-			});	
+		attStatsBtn.addActionListener(e -> {
+			new AttendanceStatisticsFrame(attmanager, lecmanager).setVisible(true);
+		});
 		schbtn.addActionListener(e -> {
     JDialog dialog = new JDialog(this, "일정 관리", true);  // 모달(true)
     ScheduleManagerUI scheduleUI = new ScheduleManagerUI(lecmanager, schmanager);

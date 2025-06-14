@@ -6,6 +6,7 @@ public class AttendanceRecord implements Serializable {
     private String lectureName;
     private String date;
     private String status; // "출석", "결석", "지각" 등
+    // 한 건의 출석 데이터를 나타내는 클래스
 
     public AttendanceRecord(String lectureName, String date, String status) {
         this.lectureName = lectureName;
