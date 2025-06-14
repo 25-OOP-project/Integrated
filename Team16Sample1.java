@@ -158,7 +158,7 @@ class MainWindow extends JFrame {
 
 
 
-			// MainWindow 안에
+	    // 임시로 버튼 이벤트 연결
 		attbtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -180,21 +180,27 @@ class MainWindow extends JFrame {
 				attFrame.setVisible(true);
 			}
 		});
-
 		attStatsBtn.addActionListener(e -> {
 			new AttendanceStatisticsFrame(attmanager, lecmanager).setVisible(true);
 		});
 		schbtn.addActionListener(e -> {
-    JDialog dialog = new JDialog(this, "일정 관리", true);  // 모달(true)
-    ScheduleManagerUI scheduleUI = new ScheduleManagerUI(lecmanager, schmanager);
+    	JDialog dialog = new JDialog(this, "일정 관리", true);  // 모달(true)
+    	ScheduleManagerUI scheduleUI = new ScheduleManagerUI(lecmanager, schmanager);
     
-    dialog.setContentPane(scheduleUI.getContentPane());  // 내부 구성 복사
-    dialog.setSize(scheduleUI.getSize());                // 크기도 복사
-    dialog.setLocationRelativeTo(this);                  // 부모 기준 가운데 정렬
-    dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-    dialog.setVisible(true);
-});
+    	dialog.setContentPane(scheduleUI.getContentPane());  // 내부 구성 복사
+    	dialog.setSize(scheduleUI.getSize());                // 크기도 복사
+    	dialog.setLocationRelativeTo(this);                  // 부모 기준 가운데 정렬
+    	dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+    	dialog.setVisible(true);
+		});
 
+		membtn.addActionListener(e -> {
+    	String[] lectureNames = memomanager.getLectureNames(); // 메모매니저로부터 과목명 가져오기
+    	JFrame frame = new JFrame("강의 메모");
+    	frame.setContentPane(new MemoPanel(lectureNames));
+    	frame.pack();
+    	frame.setLocationRelativeTo(null);
+    	frame.setVisible(true);});
 
 	
 
